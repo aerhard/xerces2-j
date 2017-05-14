@@ -162,6 +162,18 @@ final class ShortHandPointer implements XPointerPart {
                 // 4. No externally determined ID's
             }
         }
+
+        // patch as posted by George Bina at https://issues.apache.org/jira/browse/XERCESJ-1113
+        if (normalizedValue == null && attributes != null) {
+            // Try to see if we can get an xml:id
+            for (int i = 0; i < attributes.getLength(); i++) {
+                if ("xml".equals(attributes.getPrefix(i)) &&
+                 "id".equals(attributes.getLocalName(i))) {
+                    normalizedValue = attributes.getValue(i);
+                    break;
+                }
+            }
+        }
         
         if (normalizedValue != null
                 && normalizedValue.equals(fShortHandPointer)) {
